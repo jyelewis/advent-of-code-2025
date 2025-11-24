@@ -7,10 +7,7 @@ export class Position {
   ) {}
 
   public move(direction: Direction, steps: number = 1) {
-    return new Position(
-      this.x + direction.dx * steps,
-      this.y + direction.dy * steps,
-    ) as this;
+    return new Position(this.x + direction.dx * steps, this.y + direction.dy * steps) as this;
   }
 
   get key() {

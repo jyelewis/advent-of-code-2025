@@ -17,10 +17,7 @@ describe("Direction", () => {
       assert.deepStrictEqual(Direction.LEFT.rotate90CW(), Direction.UP);
     });
     it("should throw for non-cardinal directions", () => {
-      assert.throws(
-        () => Direction.UP_LEFT.rotate90CW(),
-        /Cannot rotate non-cardinal direction/,
-      );
+      assert.throws(() => Direction.UP_LEFT.rotate90CW(), /Cannot rotate non-cardinal direction/);
     });
   });
 
@@ -38,10 +35,7 @@ describe("Direction", () => {
       assert.deepStrictEqual(Direction.RIGHT.rotate90CCW(), Direction.UP);
     });
     it("should throw for non-cardinal directions", () => {
-      assert.throws(
-        () => Direction.UP_LEFT.rotate90CCW(),
-        /Cannot rotate non-cardinal direction/,
-      );
+      assert.throws(() => Direction.UP_LEFT.rotate90CCW(), /Cannot rotate non-cardinal direction/);
     });
   });
 });

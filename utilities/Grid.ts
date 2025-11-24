@@ -44,9 +44,7 @@ export class GridPosition<PosValue> extends Position {
     return new Position(this.x, this.y);
   }
 
-  adjacents(
-    directions: Direction[] = Direction.CARDINAL,
-  ): GridPosition<PosValue>[] {
+  adjacents(directions: Direction[] = Direction.CARDINAL): GridPosition<PosValue>[] {
     return directions.mapNotNull((dir) => this.moveOrNull(dir));
   }
 
@@ -93,11 +91,7 @@ export class Grid<PosValue> {
     );
   }
 
-  static fromSize<PosValue>(
-    width: number,
-    height: number,
-    defaultValue: PosValue,
-  ) {
+  static fromSize<PosValue>(width: number, height: number, defaultValue: PosValue) {
     const items: PosValue[][] = [];
     for (let y = 0; y < height; y++) {
       const row: PosValue[] = [];
@@ -126,9 +120,7 @@ export class Grid<PosValue> {
   }
 
   isInBounds(pos: Position) {
-    return (
-      0 <= pos.x && pos.x < this.width && 0 <= pos.y && pos.y < this.height
-    );
+    return 0 <= pos.x && pos.x < this.width && 0 <= pos.y && pos.y < this.height;
   }
 
   itemAt(pos: Position) {

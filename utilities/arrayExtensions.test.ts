@@ -180,9 +180,7 @@ describe("Array extensions", () => {
 
     test("should handle complex transformations", () => {
       const arr = ["a", "b", "c"];
-      const result = arr.mapNotNull((s) =>
-        s === "b" ? null : s.toUpperCase(),
-      );
+      const result = arr.mapNotNull((s) => (s === "b" ? null : s.toUpperCase()));
       assert.deepStrictEqual(result, ["A", "C"]);
     });
   });

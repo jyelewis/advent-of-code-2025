@@ -82,11 +82,6 @@ export class Direction {
   static DOWN_RIGHT = new Direction(1, 1);
 
   static CARDINAL = [this.UP, this.DOWN, this.LEFT, this.RIGHT];
-  static DIAGONAL = [
-    this.UP_LEFT,
-    this.UP_RIGHT,
-    this.DOWN_LEFT,
-    this.DOWN_RIGHT,
-  ];
+  static DIAGONAL = [this.UP_LEFT, this.UP_RIGHT, this.DOWN_LEFT, this.DOWN_RIGHT];
   static ALL = [...this.CARDINAL, ...this.DIAGONAL];
 }

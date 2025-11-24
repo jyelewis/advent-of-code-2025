@@ -131,8 +131,7 @@ describe("range", () => {
       assert.ok(result.length === 3 || result.length === 4);
       assert.ok(Math.abs(result[0]) < 0.0001);
       assert.ok(
-        Math.abs(result[result.length - 1] - 0.3) < 0.0001 ||
-          Math.abs(result[result.length - 1] - 0.2) < 0.0001,
+        Math.abs(result[result.length - 1] - 0.3) < 0.0001 || Math.abs(result[result.length - 1] - 0.2) < 0.0001,
       );
     });
 

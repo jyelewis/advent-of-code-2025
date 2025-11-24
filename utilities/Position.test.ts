@@ -237,10 +237,7 @@ describe("Position", () => {
     test("should be symmetric", () => {
       const pos1 = new Position(1, 2);
       const pos2 = new Position(5, 8);
-      assert.strictEqual(
-        pos1.manhattanDistanceTo(pos2),
-        pos2.manhattanDistanceTo(pos1),
-      );
+      assert.strictEqual(pos1.manhattanDistanceTo(pos2), pos2.manhattanDistanceTo(pos1));
     });
   });
 

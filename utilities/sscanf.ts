@@ -7,9 +7,7 @@ export const sscanf =
     for (let i = 0; i < types.length; i++) {
       const staticSection = staticSections[i];
       if (!rest.startsWith(staticSection)) {
-        throw new Error(
-          `Failed to parse, was expecting "${staticSection}" but got "${rest}" (input: "${input}")`,
-        );
+        throw new Error(`Failed to parse, was expecting "${staticSection}" but got "${rest}" (input: "${input}")`);
       }
       rest = rest.slice(staticSection.length);
 
@@ -18,9 +16,7 @@ export const sscanf =
         case Number: {
           const match = rest.match(/^[0-9-\.]+/);
           if (!match) {
-            throw new Error(
-              `Failed to parse, was expecting a number but got "${rest}" (input: "${input}")`,
-            );
+            throw new Error(`Failed to parse, was expecting a number but got "${rest}" (input: "${input}")`);
           }
           const numStr = match[0];
           const numValue = parseFloat(numStr);

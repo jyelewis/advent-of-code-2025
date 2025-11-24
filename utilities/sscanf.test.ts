@@ -19,9 +19,7 @@ describe("sscanf", () => {
   });
 
   it("Person details", () => {
-    const result = sscanf`Name: ${String}; age: ${Number}; height: ${Number}cm`(
-      "Name: Buster; age: 39; height: 184cm",
-    );
+    const result = sscanf`Name: ${String}; age: ${Number}; height: ${Number}cm`("Name: Buster; age: 39; height: 184cm");
     assert.deepEqual(result, ["Buster", 39, 184]);
   });
 
@@ -59,9 +57,6 @@ describe("sscanf", () => {
   });
 
   it("Error: Unknown type", () => {
-    assert.throws(
-      () => sscanf`Value: ${Boolean}`("Value: true"),
-      /Unknown type:/,
-    );
+    assert.throws(() => sscanf`Value: ${Boolean}`("Value: true"), /Unknown type:/);
   });
 });
