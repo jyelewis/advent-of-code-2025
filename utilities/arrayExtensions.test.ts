@@ -247,4 +247,87 @@ describe("Array extensions", () => {
       assert.strictEqual(arr1.equalsArray(arr2), false);
     });
   });
+
+  describe("findOne", () => {
+    test("should return the single matching element", () => {
+      const arr = [1, 2, 3, 4, 5];
+      const result = arr.findOne((x) => x === 3);
+      assert.strictEqual(result, 3);
+    });
+
+    test("should throw when no elements match", () => {
+      const arr = [1, 2, 3];
+      assert.throws(() => arr.findOne((x) => x > 10), {
+        message: "Could not find item",
+      });
+    });
+
+    test("should throw when multiple elements match", () => {
+      const arr = [1, 2, 3, 4, 5];
+      assert.throws(() => arr.findOne((x) => x > 3), {
+        message: "Found more than one item",
+      });
+    });
+
+    test("should throw on empty array", () => {
+      const arr: number[] = [];
+      assert.throws(() => arr.findOne((x) => x > 0), {
+        message: "Could not find item",
+      });
+    });
+
+    test("should work with object arrays", () => {
+      const arr = [{ id: 1 }, { id: 2 }, { id: 3 }];
+      const result = arr.findOne((obj) => obj.id === 2);
+      assert.deepStrictEqual(result, { id: 2 });
+    });
+
+    test("should work with string arrays", () => {
+      const arr = ["foo", "bar", "baz"];
+      const result = arr.findOne((s) => s.startsWith("ba") && s.endsWith("r"));
+      assert.strictEqual(result, "bar");
+    });
+
+    test("should work with single element array when it matches", () => {
+      const arr = [42];
+      const result = arr.findOne((x) => x === 42);
+      assert.strictEqual(result, 42);
+    });
+
+    test("should throw with single element array when it doesn't match", () => {
+      const arr = [42];
+      assert.throws(() => arr.findOne((x) => x === 99), {
+        message: "Could not find item",
+      });
+    });
+
+    test("should work with complex predicates", () => {
+      const arr = [
+        { name: "Alice", age: 25 },
+        { name: "Bob", age: 30 },
+        { name: "Charlie", age: 35 },
+      ];
+      const result = arr.findOne((person) => person.name.startsWith("B") && person.age === 30);
+      assert.deepStrictEqual(result, { name: "Bob", age: 30 });
+    });
+
+    test("should throw when two elements match", () => {
+      const arr = [1, 2, 3, 4];
+      assert.throws(() => arr.findOne((x) => x % 2 === 0), {
+        message: "Found more than one item",
+      });
+    });
+
+    test("should return first element if it's the only match", () => {
+      const arr = [5, 2, 3, 4];
+      const result = arr.findOne((x) => x === 5);
+      assert.strictEqual(result, 5);
+    });
+
+    test("should return last element if it's the only match", () => {
+      const arr = [1, 2, 3, 5];
+      const result = arr.findOne((x) => x === 5);
+      assert.strictEqual(result, 5);
+    });
+  });
 });

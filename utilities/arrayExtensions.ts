@@ -8,6 +8,7 @@ declare global {
     unique(fn?: (item: T) => string): Array<T>;
     mapNotNull<O>(fn: (item: T) => null | O): O[];
     equalsArray<O>(otherArray: O[]): boolean;
+    findOne(predicate: (item: T) => boolean): T;
   }
 }
 
@@ -62,6 +63,18 @@ Array.prototype.equalsArray = function <O>(otherArray: O[]): boolean {
   }
 
   return true;
+};
+
+Array.prototype.findOne = function <T>(predicate: (item: T) => boolean): T {
+  const results = this.filter(predicate);
+  if (results.length === 0) {
+    throw new Error("Could not find item");
+  }
+  if (results.length > 1) {
+    throw new Error("Found more than one item");
+  }
+
+  return results[0];
 };
 
 export {};
