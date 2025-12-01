@@ -39,6 +39,18 @@ describe("Array extensions", () => {
       const result = arr.count((s) => s.startsWith("b"));
       assert.strictEqual(result, 2);
     });
+
+    test("should pass index to predicate", () => {
+      const arr = [10, 20, 30, 40, 50];
+      const result = arr.count((x, i) => i > 2);
+      assert.strictEqual(result, 2);
+    });
+
+    test("should work with both value and index in predicate", () => {
+      const arr = [5, 10, 15, 20, 25];
+      const result = arr.count((x, i) => x > 10 && i < 4);
+      assert.strictEqual(result, 2); // 15 at index 2, 20 at index 3
+    });
   });
 
   describe("sum", () => {
@@ -182,6 +194,24 @@ describe("Array extensions", () => {
       const arr = ["a", "b", "c"];
       const result = arr.mapNotNull((s) => (s === "b" ? null : s.toUpperCase()));
       assert.deepStrictEqual(result, ["A", "C"]);
+    });
+
+    test("should pass index to mapping function", () => {
+      const arr = [10, 20, 30, 40, 50];
+      const result = arr.mapNotNull((x, i) => i);
+      assert.deepStrictEqual(result, [0, 1, 2, 3, 4]);
+    });
+
+    test("should use index to conditionally return null", () => {
+      const arr = ["a", "b", "c", "d", "e"];
+      const result = arr.mapNotNull((s, i) => (i % 2 === 0 ? s.toUpperCase() : null));
+      assert.deepStrictEqual(result, ["A", "C", "E"]);
+    });
+
+    test("should work with both value and index in transformation", () => {
+      const arr = [5, 10, 15, 20];
+      const result = arr.mapNotNull((x, i) => (x > 10 ? `${x}-${i}` : null));
+      assert.deepStrictEqual(result, ["15-2", "20-3"]);
     });
   });
 

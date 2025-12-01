@@ -3,18 +3,18 @@ import assert from "node:assert";
 
 declare global {
   interface Array<T> {
-    count(fn: (item: T) => boolean): number;
+    count(fn: (item: T, index: number) => boolean): number;
     sum(): number;
     unique(fn?: (item: T) => string): Array<T>;
-    mapNotNull<O>(fn: (item: T) => null | O): O[];
+    mapNotNull<O>(fn: (item: T, index: number) => null | O): O[];
     equalsArray<O>(otherArray: O[]): boolean;
     findOne(predicate: (item: T) => boolean): T;
   }
 }
 
-Array.prototype.count = function (fn: (item: any) => boolean): number {
-  return this.reduce((acc, val) => {
-    return acc + (fn(val) ? 1 : 0);
+Array.prototype.count = function (fn: (item: any, index: number) => boolean): number {
+  return this.reduce((acc, val, index) => {
+    return acc + (fn(val, index) ? 1 : 0);
   }, 0);
 };
 
@@ -47,7 +47,7 @@ Array.prototype.unique = function (fn?: (item: any) => string): Array<any> {
   });
 };
 
-Array.prototype.mapNotNull = function <O>(fn: (item: any) => null | O): O[] {
+Array.prototype.mapNotNull = function <O>(fn: (item: any, index: number) => null | O): O[] {
   return this.map(fn).filter((x) => x !== null);
 };
 
