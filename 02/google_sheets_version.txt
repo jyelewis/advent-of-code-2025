@@ -1,0 +1,7 @@
+
+https://docs.google.com/spreadsheets/d/12OHhrs8t6kPDOFLPBdjEXcZnL7pghV921TVT8PdlX3g/edit?gid=0#gid=0
+^ most raw computations, however this sheet crashes often
+
+Answer continued on:
+https://docs.google.com/spreadsheets/d/1qFkg-zAqVks7ZgG1ihK9Scd0ELwTrIuIhR6q40OfEGw/edit?gid=0#gid=0
+(with pre-calculated values copied from the first sheet to avoid crashes)
