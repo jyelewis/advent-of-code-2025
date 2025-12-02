@@ -14,7 +14,7 @@ export const sscanf =
       const type = types[i];
       switch (type) {
         case Number: {
-          const match = rest.match(/^[0-9-\.]+/);
+          const match = rest.match(/^[0-9\.]+/);
           if (!match) {
             throw new Error(`Failed to parse, was expecting a number but got "${rest}" (input: "${input}")`);
           }
