@@ -19,7 +19,7 @@ export function largestJoltageForBank(bank: number[], numDigits: number) {
 }
 
 export function day03(input: string) {
-  const banks = input.lines().map((line) => line.chars().map((x) => parseInt(x, 10)));
+  const banks = input.lines().map((line) => line.numbers());
 
   return {
     partA: banks.map((bank) => largestJoltageForBank(bank, 2)).sum(),
