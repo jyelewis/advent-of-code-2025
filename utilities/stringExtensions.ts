@@ -3,7 +3,7 @@ declare global {
   interface String {
     lines(): string[];
     chars(): string[];
-    numbers(): number[];
+    toInt(): number;
   }
 }
 
@@ -15,14 +15,12 @@ String.prototype.chars = function (): string[] {
   return this.split("");
 };
 
-String.prototype.numbers = function (): number[] {
-  return this.chars().map((char) => {
-    const val = parseInt(char, 10);
-    if (isNaN(val)) {
-      throw new Error(`Character "${char}" is not a valid number`);
-    }
-    return val;
-  });
+String.prototype.toInt = function (): number {
+  const val = parseInt(this as string, 10);
+  if (Number.isNaN(val)) {
+    throw new Error(`String "${this}" is not a valid base10 number`);
+  }
+  return val;
 };
 
 export {};

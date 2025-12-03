@@ -7,7 +7,7 @@ export function day01(input: string) {
 
   for (const rotation of input.lines()) {
     const direction = rotation.charAt(0);
-    const value = parseInt(rotation.slice(1));
+    const value = rotation.slice(1).toInt();
 
     for (const i of range(value)) {
       dialValue = direction === "L" ? dialValue + 1 : dialValue - 1;
