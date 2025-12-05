@@ -26,4 +26,8 @@ describe("day04", () => {
     const answer = day04b(input);
     assert.equal(answer, 7922);
   });
+
+  it("Test failing test", () => {
+    assert.equal(1 + 1, 3);
+  });
 });
