@@ -1,6 +1,4 @@
-import "../utilities";
 import { sscanf } from "../utilities";
-import assert from "node:assert";
 
 export function day05a(input: string) {
   const [freshRangesStr, ingredientIdsStr] = input.split("\n\n");
@@ -24,7 +22,6 @@ export function day05b(input: string) {
     const notOverlappingRanges = existingRanges.filter(
       (existingRange) => !(existingRange.from <= to && existingRange.to >= from),
     );
-    assert(overlappingRanges.length + notOverlappingRanges.length === existingRanges.length, "Something went wrong");
 
     const overlappingFrom = Math.min(...overlappingRanges.map((r) => r.from), from);
     const overlappingTo = Math.max(...overlappingRanges.map((r) => r.to), to);
