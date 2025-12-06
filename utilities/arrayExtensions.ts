@@ -5,6 +5,7 @@ declare global {
   interface Array<T> {
     count(fn: (item: T, index: number) => boolean): number;
     sum(): number;
+    product(): number;
     unique(fn?: (item: T) => string): Array<T>;
     mapNotNull<O>(fn: (item: T, index: number) => null | O): O[];
     equalsArray<O>(otherArray: O[]): boolean;
@@ -26,6 +27,16 @@ Array.prototype.sum = function (): number {
 
     return acc + val;
   }, 0);
+};
+
+Array.prototype.product = function (): number {
+  return this.reduce((acc, val) => {
+    if (typeof val !== "number") {
+      throw new TypeError("Array contains non-numeric values");
+    }
+
+    return acc * val;
+  }, 1);
 };
 
 Array.prototype.unique = function (fn?: (item: any) => string): Array<any> {
