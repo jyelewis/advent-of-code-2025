@@ -89,11 +89,11 @@ Array.prototype.findOne = function <T>(predicate: (item: T) => boolean): T {
   return results[0];
 };
 
-// TODO: test me
 Array.prototype.transpose = function <T>(): T[][] {
-  if (this.length === 0) {
-    return [];
-  }
+  assert(
+    this.every((elm) => Array.isArray(elm)),
+    "transpose requires a 2D array",
+  );
 
   const rowCount = this.length;
   const colCount = (this[0] as any).length;

@@ -360,4 +360,56 @@ describe("Array extensions", () => {
       assert.strictEqual(result, 5);
     });
   });
+
+  describe("transpose", () => {
+    test("transposes a square 2D array", () => {
+      const arr = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ];
+      const result = arr.transpose();
+      const expected = [
+        [1, 4, 7],
+        [2, 5, 8],
+        [3, 6, 9],
+      ];
+      assert.deepStrictEqual(result, expected);
+    });
+
+    test("transposes a vert rect 2D array", () => {
+      const arr = [
+        [1, 2],
+        [4, 5],
+        [7, 8],
+      ];
+      const result = arr.transpose();
+      const expected = [
+        [1, 4, 7],
+        [2, 5, 8],
+      ];
+      assert.deepStrictEqual(result, expected);
+    });
+
+    test("transposes a horz 2D array", () => {
+      const arr = [
+        [1, 2, 3],
+        [4, 5, 6],
+      ];
+      const result = arr.transpose();
+      const expected = [
+        [1, 4],
+        [2, 5],
+        [3, 6],
+      ];
+      assert.deepStrictEqual(result, expected);
+    });
+
+    test("Throws when not a 2d array", () => {
+      const arr = [1, 2, 3];
+      assert.throws(() => arr.transpose(), {
+        message: "transpose requires a 2D array",
+      });
+    });
+  });
 });
