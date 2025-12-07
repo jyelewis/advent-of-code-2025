@@ -1,11 +1,18 @@
 import { range } from "../utilities";
 
 export function day06(input: string) {
-  // parse numbers & operations _without_ loosing spacing info
   const lines = input.lines();
   const numLines = lines.slice(0, -1);
   const operationsLine = lines[lines.length - 1];
 
+  // extract each expression i.e.
+  // -----
+  // 64
+  // 23
+  // 314
+  // +
+  // -----
+  // becomes: { operation: "+", numStrings: ["64 ", "23 ", "314"] }
   const expressions = operationsLine
     .matchAll(/[*+] +/g)
     .toArray()
@@ -40,7 +47,7 @@ export function day06(input: string) {
     .map((exp) => {
       const nums = range(exp.numStrings[0].length).map((digitIndex) =>
         exp.numStrings
-          // extract digit from correct column
+          // extract digit from correct column of each numStr
           .map((numStr) => numStr.charAt(numStr.length - digitIndex - 1))
           // remove empty spaces
           .filter((numChar) => numChar !== " ")

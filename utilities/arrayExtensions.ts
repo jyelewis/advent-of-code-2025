@@ -10,6 +10,7 @@ declare global {
     mapNotNull<O>(fn: (item: T, index: number) => null | O): O[];
     equalsArray<O>(otherArray: O[]): boolean;
     findOne(predicate: (item: T) => boolean): T;
+    transpose<U>(): U[][];
   }
 }
 
@@ -86,6 +87,26 @@ Array.prototype.findOne = function <T>(predicate: (item: T) => boolean): T {
   }
 
   return results[0];
+};
+
+// TODO: test me
+Array.prototype.transpose = function <T>(): T[][] {
+  if (this.length === 0) {
+    return [];
+  }
+
+  const rowCount = this.length;
+  const colCount = (this[0] as any).length;
+
+  const transposed: T[][] = Array.from({ length: colCount }, () => Array.from({ length: rowCount }));
+
+  for (let r = 0; r < rowCount; r++) {
+    for (let c = 0; c < colCount; c++) {
+      transposed[c][r] = (this[r] as any)[c];
+    }
+  }
+
+  return transposed;
 };
 
 export {};
