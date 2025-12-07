@@ -14,6 +14,11 @@ export class Position {
     return `${this.x},${this.y}`;
   }
 
+  // dramatically speeds up serialisation (used in memos)
+  toJSON() {
+    return { x: this.x, y: this.y };
+  }
+
   equals(other: Position) {
     return this.x === other.x && this.y === other.y;
   }
