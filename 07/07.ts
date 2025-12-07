@@ -1,42 +1,17 @@
 import { Grid, GridPosition, memo } from "../utilities";
 
-export function day07a(input: string) {
+export function day07(input: string) {
   const grid = Grid.fromString(input);
   const startPosition = grid.positions.findOne((pos) => pos.value === "S");
+  const splitLocations = new Set<string>();
 
-  let splitLocations = new Set<string>();
-  let prevTachyonBeams = [startPosition];
-  while (prevTachyonBeams.length > 0) {
-    const newTachyonBeams = [];
-    for (const beam of prevTachyonBeams) {
-      if (beam.downOrNull()?.value === "^") {
-        // split
-        if (!splitLocations.has(beam.down().key)) {
-          splitLocations.add(beam.down().key);
-          newTachyonBeams.push(beam.down().right());
-          newTachyonBeams.push(beam.down().left());
-        }
-      }
-
-      if (beam.downOrNull()?.value === ".") {
-        // move down
-        newTachyonBeams.push(beam.down());
-      }
-    }
-
-    prevTachyonBeams = newTachyonBeams;
-  }
-
-  return splitLocations.size;
-}
-
-export function day07b(input: string) {
-  const grid = Grid.fromString(input);
-  const startPosition = grid.positions.findOne((pos) => pos.value === "S");
-
+  // recursively count the number of unique timelines from a given position
   const numTimelinesFromPosition = memo((beam: GridPosition<string>): number => {
     if (beam.downOrNull()?.value === "^") {
-      // split path, count timelines from both sides
+      // part A: record unique split locations
+      splitLocations.add(beam.down().key);
+
+      // part B: split path, count timelines from both sides
       return numTimelinesFromPosition(beam.down().right()) + numTimelinesFromPosition(beam.down().left());
     }
 
@@ -49,5 +24,8 @@ export function day07b(input: string) {
     return 1;
   });
 
-  return numTimelinesFromPosition(startPosition);
+  const partB = numTimelinesFromPosition(startPosition);
+  const partA = splitLocations.size;
+
+  return { partA, partB };
 }
