@@ -1,35 +1,62 @@
 import { range } from "../utilities";
 
-export function day06a(input: string) {
-  const input2 = input.lines().map((line) => {
-    return line
-      .split(/ /g)
-      .map((x) => x.trim())
-      .filter((x) => x.length !== 0);
-  });
+export function day06(input: string) {
+  // parse numbers & operations _without_ loosing spacing info
+  const lines = input.lines();
+  const numLines = lines.slice(0, -1);
+  const operationsLine = lines[lines.length - 1];
 
-  const input3 = range(input2[0].length).map((colIndex) => {
-    return range(input2.length).map((rowIndex) => {
-      return input2[rowIndex][colIndex];
+  const expressions = operationsLine
+    .matchAll(/[*+] +/g)
+    .toArray()
+    .map((regexArr) => {
+      const operationWithSpaces = regexArr[0];
+
+      // use the location of the operation to find the starting location of this column
+      const startCol = regexArr.index!;
+      const endCol = startCol + operationWithSpaces.length - 1;
+
+      return {
+        operation: operationWithSpaces.trim(),
+        // iterate vertically down the column for this operation to get all the number strings
+        numStrings: numLines.map((numLine) => numLine.substring(startCol, endCol)),
+      };
     });
-  });
 
-  const sums = input3.map((eq) => {
-    const numStrs = eq.slice(0, -1);
-    const operation = eq[eq.length - 1];
-    const nums = numStrs.map((x) => x.toInt());
-    if (operation === "+") {
-      return nums.sum();
-    } else if (operation === "*") {
-      return nums.product();
-    } else {
-      throw new Error(`Unknown operation: ${operation}`);
-    }
-  });
+  const partA = expressions
+    .map((exp) => {
+      const nums = exp.numStrings.map((x) => x.toInt());
 
-  return sums.sum();
-}
+      switch (exp.operation) {
+        case "+":
+          return nums.sum();
+        case "*":
+          return nums.product();
+      }
+    })
+    .sum();
 
-export function day06b(input: string) {
-  return 123;
+  const partB = expressions
+    .map((exp) => {
+      const nums = range(exp.numStrings[0].length).map((digitIndex) =>
+        exp.numStrings
+          // extract digit from correct column
+          .map((numStr) => numStr.charAt(numStr.length - digitIndex - 1))
+          // remove empty spaces
+          .filter((numChar) => numChar !== " ")
+          // convert back to number
+          .join("")
+          .toInt(),
+      );
+
+      switch (exp.operation) {
+        case "+":
+          return nums.sum();
+        case "*":
+          return nums.product();
+      }
+    })
+    .sum();
+
+  return { partA, partB };
 }
