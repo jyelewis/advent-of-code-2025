@@ -19,7 +19,7 @@ describe("day07", () => {
 
   it("07b sample input", () => {
     const answer = day07b(sampleInput);
-    assert.equal(answer, 123);
+    assert.equal(answer, 40);
   });
 
   it("07b input", () => {

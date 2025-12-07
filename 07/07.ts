@@ -36,14 +36,16 @@ export function day07b(input: string) {
 
   const numTimelinesFromPosition = memo((beam: GridPosition<string>): number => {
     if (beam.downOrNull()?.value === "^") {
+      // split path, count timelines from both sides
       return numTimelinesFromPosition(beam.down().right()) + numTimelinesFromPosition(beam.down().left());
     }
 
     if (beam.downOrNull()?.value === ".") {
-      // move down
+      // count timelines from moving down one
       return numTimelinesFromPosition(beam.down());
     }
 
+    // we've reached the end of a unique timeline
     return 1;
   });
 
