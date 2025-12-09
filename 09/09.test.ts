@@ -14,9 +14,7 @@ describe("day09", () => {
   });
 
   it("09 input", () => {
-    console.time("09");
     const { partA, partB } = day09(input);
-    console.timeEnd("09");
     assert.equal(partA, 4745816424);
     assert.equal(partB, 1351617690);
   });

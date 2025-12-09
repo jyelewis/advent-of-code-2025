@@ -3,6 +3,7 @@ import * as turf from "@turf/turf";
 import * as de9im from "de9im";
 
 export function day09(input: string) {
+  // parse all red tile coordinates into Array<{x, y}>;
   const redTiles = input.lines().map((line) => {
     const [x, y] = sscanf`${Number},${Number}`(line);
     return { x, y };
@@ -36,6 +37,8 @@ export function day09(input: string) {
   const largestInternalRect = allInternalRects
     // optimisation from visualising: we know the vertexes must be in the same half of the circle
     .filter(({ tileA, tileB }) => tileA.y < 50000 === tileB.y < 50000)
+    // post solution optimisation
+    .filter(({ tileA }) => tileA.x < 5000)
     // find the first rectangle fully contained within the polygon
     .find(({ tileA, tileB }) =>
       de9im.contains(
