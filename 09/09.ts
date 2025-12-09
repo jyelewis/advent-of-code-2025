@@ -30,7 +30,7 @@ export function day09b(input: string) {
   // connect all our red tiles into a polygon (also wrap the last to the first)
   const fullPolygon = turf.polygon([[...redTiles.map((t) => [t.x, t.y]), [redTiles[0]!.x, redTiles[0]!.y]]]);
 
-  const possibleCombos = [];
+  const allInternalRects = [];
   for (const tileA of redTiles) {
     for (const tileB of redTiles) {
       // from visualisation
@@ -40,7 +40,7 @@ export function day09b(input: string) {
       }
 
       const area = (Math.abs(tileA.x - tileB.x) + 1) * (Math.abs(tileA.y - tileB.y) + 1);
-      possibleCombos.push({
+      allInternalRects.push({
         tileA,
         tileB,
         area,
@@ -48,7 +48,7 @@ export function day09b(input: string) {
     }
   }
 
-  const largestInternalRect = possibleCombos
+  const largestInternalRect = allInternalRects
     // check the largest areas first
     .toSorted((a, b) => b.area - a.area)
     // find the first rectangle fully contained within the polygon
