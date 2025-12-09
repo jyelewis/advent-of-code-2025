@@ -32,7 +32,7 @@ export function day06(input: string) {
 
   const partA = expressions
     .map((exp) => {
-      const nums = exp.numStrings.map((x) => x.toInt());
+      const nums = exp.numStrings.map((x) => x.trim().toInt());
 
       switch (exp.operation) {
         case "+":

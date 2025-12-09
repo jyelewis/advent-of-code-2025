@@ -38,4 +38,33 @@ describe("Direction", () => {
       assert.throws(() => Direction.UP_LEFT.rotate90CCW(), /Cannot rotate non-cardinal direction/);
     });
   });
+
+  describe("Constants", () => {
+    it("Cardinals", () => {
+      assert.notEqual(Direction.UP, undefined);
+      assert.notEqual(Direction.DOWN, undefined);
+      assert.notEqual(Direction.LEFT, undefined);
+      assert.notEqual(Direction.RIGHT, undefined);
+    });
+
+    it("NSEW", () => {
+      assert.notEqual(Direction.NORTH, undefined);
+      assert.notEqual(Direction.SOUTH, undefined);
+      assert.notEqual(Direction.EAST, undefined);
+      assert.notEqual(Direction.WEST, undefined);
+    });
+
+    it("Diagonals", () => {
+      assert.notEqual(Direction.UP_LEFT, undefined);
+      assert.notEqual(Direction.UP_RIGHT, undefined);
+      assert.notEqual(Direction.DOWN_LEFT, undefined);
+      assert.notEqual(Direction.DOWN_RIGHT, undefined);
+    });
+
+    it("preset groups", () => {
+      assert.equal(Direction.CARDINAL.length, 4);
+      assert.equal(Direction.DIAGONAL.length, 4);
+      assert.equal(Direction.ALL.length, 8);
+    });
+  });
 });

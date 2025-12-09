@@ -1,4 +1,4 @@
-import { describe, test } from "node:test";
+import { describe, it } from "node:test";
 import assert from "node:assert";
 import { Grid, GridPosition } from "./Grid";
 import { Position } from "./Position";
@@ -8,7 +8,7 @@ import "./arrayExtensions";
 
 describe("Grid", () => {
   describe("constructor", () => {
-    test("should create grid from 2D array", () => {
+    it("should create grid from 2D array", () => {
       const grid = new Grid([
         [1, 2],
         [3, 4],
@@ -17,31 +17,31 @@ describe("Grid", () => {
       assert.strictEqual(grid.height, 2);
     });
 
-    test("should throw on empty array", () => {
+    it("should throw on empty array", () => {
       assert.throws(() => new Grid([]), {
         message: "items must be non empty",
       });
     });
 
-    test("should throw on inconsistent row sizes", () => {
+    it("should throw on inconsistent row sizes", () => {
       assert.throws(() => new Grid([[1, 2], [3]]), {
         message: "Inconsistent row sizes",
       });
     });
 
-    test("should handle single row", () => {
+    it("should handle single row", () => {
       const grid = new Grid([[1, 2, 3]]);
       assert.strictEqual(grid.width, 3);
       assert.strictEqual(grid.height, 1);
     });
 
-    test("should handle single column", () => {
+    it("should handle single column", () => {
       const grid = new Grid([[1], [2], [3]]);
       assert.strictEqual(grid.width, 1);
       assert.strictEqual(grid.height, 3);
     });
 
-    test("should handle large grids", () => {
+    it("should handle large grids", () => {
       const items = Array(100)
         .fill(0)
         .map(() => Array(100).fill(0));
@@ -52,7 +52,7 @@ describe("Grid", () => {
   });
 
   describe("fromSize", () => {
-    test("should create grid with default value", () => {
+    it("should create grid with default value", () => {
       const grid = Grid.fromSize(3, 2, "x");
       assert.strictEqual(grid.width, 3);
       assert.strictEqual(grid.height, 2);
@@ -60,12 +60,12 @@ describe("Grid", () => {
       assert.strictEqual(grid.items[1][2], "x");
     });
 
-    test("should create grid with null default", () => {
+    it("should create grid with null default", () => {
       const grid = Grid.fromSize(2, 2, null);
       assert.strictEqual(grid.items[0][0], null);
     });
 
-    test("should create 1x1 grid", () => {
+    it("should create 1x1 grid", () => {
       const grid = Grid.fromSize(1, 1, 0);
       assert.strictEqual(grid.width, 1);
       assert.strictEqual(grid.height, 1);
@@ -73,7 +73,7 @@ describe("Grid", () => {
   });
 
   describe("fromString", () => {
-    test("should create grid from string", () => {
+    it("should create grid from string", () => {
       const grid = Grid.fromString("abc\ndef");
       assert.strictEqual(grid.width, 3);
       assert.strictEqual(grid.height, 2);
@@ -81,13 +81,13 @@ describe("Grid", () => {
       assert.strictEqual(grid.items[1][2], "f");
     });
 
-    test("should handle single line", () => {
+    it("should handle single line", () => {
       const grid = Grid.fromString("abc");
       assert.strictEqual(grid.width, 3);
       assert.strictEqual(grid.height, 1);
     });
 
-    test("should handle empty lines consistently", () => {
+    it("should handle empty lines consistently", () => {
       const grid = Grid.fromString("\n\n");
       assert.strictEqual(grid.width, 0);
       assert.strictEqual(grid.height, 3);
@@ -95,13 +95,13 @@ describe("Grid", () => {
   });
 
   describe("positions", () => {
-    test("should return all positions", () => {
+    it("should return all positions", () => {
       const grid = Grid.fromSize(2, 2, 0);
       const positions = grid.positions;
       assert.strictEqual(positions.length, 4);
     });
 
-    test("should return positions in row-major order", () => {
+    it("should return positions in row-major order", () => {
       const grid = Grid.fromSize(2, 2, 0);
       const positions = grid.positions;
       assert.strictEqual(positions[0].x, 0);
@@ -114,7 +114,7 @@ describe("Grid", () => {
       assert.strictEqual(positions[3].y, 1);
     });
 
-    test("should return GridPosition objects", () => {
+    it("should return GridPosition objects", () => {
       const grid = Grid.fromSize(2, 2, 5);
       const positions = grid.positions;
       assert.ok(positions[0] instanceof GridPosition);
@@ -123,12 +123,12 @@ describe("Grid", () => {
   });
 
   describe("isInBounds", () => {
-    test("should return true for position inside grid", () => {
+    it("should return true for position inside grid", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.strictEqual(grid.isInBounds(new Position(1, 1)), true);
     });
 
-    test("should return true for corners", () => {
+    it("should return true for corners", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.strictEqual(grid.isInBounds(new Position(0, 0)), true);
       assert.strictEqual(grid.isInBounds(new Position(2, 0)), true);
@@ -136,34 +136,34 @@ describe("Grid", () => {
       assert.strictEqual(grid.isInBounds(new Position(2, 2)), true);
     });
 
-    test("should return false for negative x", () => {
+    it("should return false for negative x", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.strictEqual(grid.isInBounds(new Position(-1, 1)), false);
     });
 
-    test("should return false for negative y", () => {
+    it("should return false for negative y", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.strictEqual(grid.isInBounds(new Position(1, -1)), false);
     });
 
-    test("should return false for x >= width", () => {
+    it("should return false for x >= width", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.strictEqual(grid.isInBounds(new Position(3, 1)), false);
     });
 
-    test("should return false for y >= height", () => {
+    it("should return false for y >= height", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.strictEqual(grid.isInBounds(new Position(1, 3)), false);
     });
 
-    test("should return false for far out of bounds", () => {
+    it("should return false for far out of bounds", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.strictEqual(grid.isInBounds(new Position(100, 100)), false);
     });
   });
 
   describe("itemAt", () => {
-    test("should return GridPosition at position", () => {
+    it("should return GridPosition at position", () => {
       const grid = Grid.fromSize(3, 3, "x");
       const item = grid.itemAt(new Position(1, 1));
       assert.ok(item instanceof GridPosition);
@@ -172,34 +172,34 @@ describe("Grid", () => {
       assert.strictEqual(item.value, "x");
     });
 
-    test("should throw for out of bounds position", () => {
+    it("should throw for out of bounds position", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.throws(() => grid.itemAt(new Position(5, 5)), {
         message: /out of bounds/,
       });
     });
 
-    test("should throw for negative coordinates", () => {
+    it("should throw for negative coordinates", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.throws(() => grid.itemAt(new Position(-1, -1)));
     });
   });
 
   describe("itemAtOrNull", () => {
-    test("should return GridPosition for valid position", () => {
+    it("should return GridPosition for valid position", () => {
       const grid = Grid.fromSize(3, 3, "x");
       const item = grid.itemAtOrNull(new Position(1, 1));
       assert.ok(item instanceof GridPosition);
       assert.strictEqual(item!.value, "x");
     });
 
-    test("should return null for out of bounds", () => {
+    it("should return null for out of bounds", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const item = grid.itemAtOrNull(new Position(5, 5));
       assert.strictEqual(item, null);
     });
 
-    test("should return null for negative coordinates", () => {
+    it("should return null for negative coordinates", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const item = grid.itemAtOrNull(new Position(-1, -1));
       assert.strictEqual(item, null);
@@ -207,7 +207,7 @@ describe("Grid", () => {
   });
 
   describe("valueAt", () => {
-    test("should return value at position", () => {
+    it("should return value at position", () => {
       const grid = new Grid([
         [1, 2],
         [3, 4],
@@ -218,12 +218,12 @@ describe("Grid", () => {
       assert.strictEqual(grid.valueAt(new Position(1, 1)), 4);
     });
 
-    test("should throw for out of bounds", () => {
+    it("should throw for out of bounds", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.throws(() => grid.valueAt(new Position(5, 5)));
     });
 
-    test("should handle GridPosition input", () => {
+    it("should handle GridPosition input", () => {
       const grid = Grid.fromSize(3, 3, "x");
       const gridPos = grid.itemAt(new Position(1, 1));
       assert.strictEqual(grid.valueAt(gridPos), "x");
@@ -231,13 +231,13 @@ describe("Grid", () => {
   });
 
   describe("setValue", () => {
-    test("should set value at position", () => {
+    it("should set value at position", () => {
       const grid = Grid.fromSize(3, 3, 0);
       grid.setValue(new Position(1, 1), 5);
       assert.strictEqual(grid.valueAt(new Position(1, 1)), 5);
     });
 
-    test("should mutate the grid", () => {
+    it("should mutate the grid", () => {
       const grid = Grid.fromSize(2, 2, 0);
       grid.setValue(new Position(0, 0), 1);
       grid.setValue(new Position(1, 1), 2);
@@ -245,7 +245,7 @@ describe("Grid", () => {
       assert.strictEqual(grid.items[1][1], 2);
     });
 
-    test("should throw for out of bounds", () => {
+    it("should throw for out of bounds", () => {
       const grid = Grid.fromSize(3, 3, 0);
       assert.throws(() => grid.setValue(new Position(5, 5), 10));
     });
@@ -254,13 +254,13 @@ describe("Grid", () => {
 
 describe("GridPosition", () => {
   describe("value getter/setter", () => {
-    test("should get value from grid", () => {
+    it("should get value from grid", () => {
       const grid = Grid.fromSize(3, 3, "x");
       const pos = grid.itemAt(new Position(1, 1));
       assert.strictEqual(pos.value, "x");
     });
 
-    test("should set value in grid", () => {
+    it("should set value in grid", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const pos = grid.itemAt(new Position(1, 1));
       pos.value = 5;
@@ -269,7 +269,7 @@ describe("GridPosition", () => {
   });
 
   describe("move", () => {
-    test("should return GridPosition after move", () => {
+    it("should return GridPosition after move", () => {
       const grid = Grid.fromSize(5, 5, 0);
       const pos = grid.itemAt(new Position(2, 2));
       const newPos = pos.move(Direction.UP);
@@ -278,13 +278,13 @@ describe("GridPosition", () => {
       assert.strictEqual(newPos.y, 1);
     });
 
-    test("should throw when moving out of bounds", () => {
+    it("should throw when moving out of bounds", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const pos = grid.itemAt(new Position(0, 0));
       assert.throws(() => pos.move(Direction.UP));
     });
 
-    test("should handle multiple steps", () => {
+    it("should handle multiple steps", () => {
       const grid = Grid.fromSize(10, 10, 0);
       const pos = grid.itemAt(new Position(5, 5));
       const newPos = pos.move(Direction.RIGHT, 3);
@@ -294,7 +294,7 @@ describe("GridPosition", () => {
   });
 
   describe("moveOrNull", () => {
-    test("should return GridPosition for valid move", () => {
+    it("should return GridPosition for valid move", () => {
       const grid = Grid.fromSize(5, 5, 0);
       const pos = grid.itemAt(new Position(2, 2));
       const newPos = pos.moveOrNull(Direction.UP);
@@ -303,14 +303,14 @@ describe("GridPosition", () => {
       assert.strictEqual(newPos!.y, 1);
     });
 
-    test("should return null when moving out of bounds", () => {
+    it("should return null when moving out of bounds", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const pos = grid.itemAt(new Position(0, 0));
       const newPos = pos.moveOrNull(Direction.UP);
       assert.strictEqual(newPos, null);
     });
 
-    test("should return null at all edges", () => {
+    it("should return null at all edges", () => {
       const grid = Grid.fromSize(3, 3, 0);
 
       // Top edge
@@ -332,13 +332,13 @@ describe("GridPosition", () => {
   });
 
   describe("toString", () => {
-    test("should format with position and value", () => {
+    it("should format with position and value", () => {
       const grid = Grid.fromSize(3, 3, "x");
       const pos = grid.itemAt(new Position(1, 2));
       assert.strictEqual(pos.toString(), "[x:1; y:2; value:x]");
     });
 
-    test("should handle numeric values", () => {
+    it("should handle numeric values", () => {
       const grid = Grid.fromSize(3, 3, 42);
       const pos = grid.itemAt(new Position(0, 0));
       assert.strictEqual(pos.toString(), "[x:0; y:0; value:42]");
@@ -346,7 +346,7 @@ describe("GridPosition", () => {
   });
 
   describe("toPosition", () => {
-    test("should convert to plain Position", () => {
+    it("should convert to plain Position", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const gridPos = grid.itemAt(new Position(1, 2));
       const pos = gridPos.toPosition();
@@ -358,7 +358,7 @@ describe("GridPosition", () => {
   });
 
   describe("adjacents", () => {
-    test("should return cardinal adjacents by default", () => {
+    it("should return cardinal adjacents by default", () => {
       const grid = Grid.fromSize(5, 5, 0);
       const pos = grid.itemAt(new Position(2, 2));
       const adjacents = pos.adjacents();
@@ -369,21 +369,21 @@ describe("GridPosition", () => {
       assert.deepStrictEqual(coords, ["1,2", "2,1", "2,3", "3,2"]);
     });
 
-    test("should exclude out-of-bounds positions", () => {
+    it("should exclude out-of-bounds positions", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const corner = grid.itemAt(new Position(0, 0));
       const adjacents = corner.adjacents();
       assert.strictEqual(adjacents.length, 2); // Only right and down
     });
 
-    test("should support all 8 directions", () => {
+    it("should support all 8 directions", () => {
       const grid = Grid.fromSize(5, 5, 0);
       const pos = grid.itemAt(new Position(2, 2));
       const adjacents = pos.adjacents(Direction.ALL);
       assert.strictEqual(adjacents.length, 8);
     });
 
-    test("should handle custom direction lists", () => {
+    it("should handle custom direction lists", () => {
       const grid = Grid.fromSize(5, 5, 0);
       const pos = grid.itemAt(new Position(2, 2));
       const adjacents = pos.adjacents([Direction.UP, Direction.DOWN]);
@@ -392,7 +392,7 @@ describe("GridPosition", () => {
   });
 
   describe("direction helper methods", () => {
-    test("leftOrNull should return left position or null", () => {
+    it("leftOrNull should return left position or null", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const pos = grid.itemAt(new Position(1, 1));
       const left = pos.leftOrNull();
@@ -401,7 +401,7 @@ describe("GridPosition", () => {
       assert.strictEqual(left!.y, 1);
     });
 
-    test("rightOrNull should return right position or null", () => {
+    it("rightOrNull should return right position or null", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const pos = grid.itemAt(new Position(1, 1));
       const right = pos.rightOrNull();
@@ -410,7 +410,7 @@ describe("GridPosition", () => {
       assert.strictEqual(right!.y, 1);
     });
 
-    test("upOrNull should return up position or null", () => {
+    it("upOrNull should return up position or null", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const pos = grid.itemAt(new Position(1, 1));
       const up = pos.upOrNull();
@@ -419,7 +419,7 @@ describe("GridPosition", () => {
       assert.strictEqual(up!.y, 0);
     });
 
-    test("downOrNull should return down position or null", () => {
+    it("downOrNull should return down position or null", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const pos = grid.itemAt(new Position(1, 1));
       const down = pos.downOrNull();
@@ -428,7 +428,7 @@ describe("GridPosition", () => {
       assert.strictEqual(down!.y, 2);
     });
 
-    test("diagonal helpers should work", () => {
+    it("diagonal helpers should work", () => {
       const grid = Grid.fromSize(5, 5, 0);
       const pos = grid.itemAt(new Position(2, 2));
 
@@ -453,7 +453,7 @@ describe("GridPosition", () => {
       assert.strictEqual(downRight!.y, 3);
     });
 
-    test("should return null at boundaries", () => {
+    it("should return null at boundaries", () => {
       const grid = Grid.fromSize(3, 3, 0);
       const corner = grid.itemAt(new Position(0, 0));
 

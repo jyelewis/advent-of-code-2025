@@ -51,6 +51,7 @@ export class Direction {
         throw new Error(`Unknown direction character: ${directionChar}`);
     }
   }
+
   toChar() {
     switch (true) {
       case this.equals(Direction.UP):

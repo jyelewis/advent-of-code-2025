@@ -10,6 +10,7 @@
   "scripts": {
     "generate-day": "tsx template/generate-day.ts",
     "test": "tsx --test **/*.test.ts",
+    "test:coverage": "tsx --test --experimental-test-coverage **/*.test.ts",
     "tsc": "tsc --noEmit",
     "lint:check": "prettier --check .",
     "lint:fix": "prettier --write .",

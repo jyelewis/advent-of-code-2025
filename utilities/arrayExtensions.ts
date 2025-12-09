@@ -6,11 +6,12 @@ declare global {
     count(fn: (item: T, index: number) => boolean): number;
     sum(): number;
     product(): number;
-    unique(fn?: (item: T) => string): Array<T>;
+    unique(keyFn?: (item: T) => string): Array<T>;
+    groupBy<Key>(keyFn: (item: T) => Key): Map<Key, T[]>;
     mapNotNull<O>(fn: (item: T, index: number) => null | O): O[];
     equalsArray<O>(otherArray: O[]): boolean;
     findOne(predicate: (item: T) => boolean): T;
-    transpose<U>(): U[][];
+    transpose(): T[][];
   }
 }
 
@@ -40,15 +41,15 @@ Array.prototype.product = function (): number {
   }, 1);
 };
 
-Array.prototype.unique = function (fn?: (item: any) => string): Array<any> {
-  if (!fn) {
-    fn = (item: any) => item.key;
+Array.prototype.unique = function (keyFn?: (item: any) => string): Array<any> {
+  if (!keyFn) {
+    keyFn = (item: any) => item.key;
   }
 
   const seenItems = new Set<string>();
 
   return this.filter((item: any) => {
-    const itemKey = fn(item);
+    const itemKey = keyFn(item);
     assert(itemKey, "unique requires a key function");
 
     if (seenItems.has(itemKey)) {
@@ -57,6 +58,21 @@ Array.prototype.unique = function (fn?: (item: any) => string): Array<any> {
     seenItems.add(itemKey);
     return true;
   });
+};
+
+Array.prototype.groupBy = function <T, Key>(keyFn: (item: T) => Key): Map<Key, T[]> {
+  const groups = new Map<Key, T[]>();
+
+  for (const item of this) {
+    const itemKey = keyFn(item);
+
+    if (!groups.has(itemKey)) {
+      groups.set(itemKey, []);
+    }
+    groups.get(itemKey)!.push(item);
+  }
+
+  return groups;
 };
 
 Array.prototype.mapNotNull = function <O>(fn: (item: any, index: number) => null | O): O[] {

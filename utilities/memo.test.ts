@@ -1,10 +1,10 @@
-import { describe, test } from "node:test";
+import { describe, it } from "node:test";
 import assert from "node:assert";
 import { memo } from "./memo";
 
 describe("memo", () => {
   describe("basic functionality", () => {
-    test("should cache function results", () => {
+    it("should cache function results", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -18,7 +18,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1); // Should not call again
     });
 
-    test("should cache different arguments separately", () => {
+    it("should cache different arguments separately", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -30,7 +30,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 2);
     });
 
-    test("should work with no arguments", () => {
+    it("should work with no arguments", () => {
       let callCount = 0;
       const fn = memo(() => {
         callCount++;
@@ -42,7 +42,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should work with multiple arguments", () => {
+    it("should work with multiple arguments", () => {
       let callCount = 0;
       const fn = memo((x: number, y: number) => {
         callCount++;
@@ -57,7 +57,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 2);
     });
 
-    test("should work with string arguments", () => {
+    it("should work with string arguments", () => {
       let callCount = 0;
       const fn = memo((s: string) => {
         callCount++;
@@ -71,27 +71,27 @@ describe("memo", () => {
   });
 
   describe("return types", () => {
-    test("should cache string results", () => {
+    it("should cache string results", () => {
       const fn = memo((x: number) => x.toString());
       assert.strictEqual(fn(5), "5");
       assert.strictEqual(fn(5), "5");
     });
 
-    test("should cache object results", () => {
+    it("should cache object results", () => {
       const fn = memo((x: number) => ({ value: x }));
       const result1 = fn(5);
       const result2 = fn(5);
       assert.strictEqual(result1, result2); // Same reference
     });
 
-    test("should cache array results", () => {
+    it("should cache array results", () => {
       const fn = memo((x: number) => [x, x * 2]);
       const result1 = fn(5);
       const result2 = fn(5);
       assert.strictEqual(result1, result2); // Same reference
     });
 
-    test("should cache null", () => {
+    it("should cache null", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -103,7 +103,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should cache undefined", () => {
+    it("should cache undefined", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -115,7 +115,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should cache boolean results", () => {
+    it("should cache boolean results", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -129,7 +129,7 @@ describe("memo", () => {
   });
 
   describe("argument serialization", () => {
-    test("should differentiate between similar arguments", () => {
+    it("should differentiate between similar arguments", () => {
       let callCount = 0;
       const fn = memo((x: number, y: number) => {
         callCount++;
@@ -141,7 +141,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 2); // Different order = different args
     });
 
-    test("should work with object arguments", () => {
+    it("should work with object arguments", () => {
       let callCount = 0;
       const fn = memo((obj: { x: number }) => {
         callCount++;
@@ -153,7 +153,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1); // Same structure
     });
 
-    test("should work with array arguments", () => {
+    it("should work with array arguments", () => {
       let callCount = 0;
       const fn = memo((arr: number[]) => {
         callCount++;
@@ -165,7 +165,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should handle nested objects", () => {
+    it("should handle nested objects", () => {
       let callCount = 0;
       const fn = memo((obj: { a: { b: number } }) => {
         callCount++;
@@ -179,7 +179,7 @@ describe("memo", () => {
   });
 
   describe("edge cases", () => {
-    test("should handle zero as argument", () => {
+    it("should handle zero as argument", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -191,7 +191,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should handle empty string", () => {
+    it("should handle empty string", () => {
       let callCount = 0;
       const fn = memo((s: string) => {
         callCount++;
@@ -203,7 +203,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should handle negative numbers", () => {
+    it("should handle negative numbers", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -215,7 +215,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should handle NaN", () => {
+    it("should handle NaN", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -228,7 +228,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should handle Infinity", () => {
+    it("should handle Infinity", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -242,7 +242,7 @@ describe("memo", () => {
   });
 
   describe("performance characteristics", () => {
-    test("should handle many different arguments", () => {
+    it("should handle many different arguments", () => {
       let callCount = 0;
       const fn = memo((x: number) => {
         callCount++;
@@ -261,7 +261,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1000); // No new calls
     });
 
-    test("should handle recursive functions", () => {
+    it("should handle recursive functions", () => {
       const fib = memo((n: number): number => {
         if (n <= 1) return n;
         return fib(n - 1) + fib(n - 2);
@@ -273,7 +273,7 @@ describe("memo", () => {
   });
 
   describe("potential issues", () => {
-    test("should not confuse arguments with object method names", () => {
+    it("should not confuse arguments with object method names", () => {
       let callCount = 0;
       const fn = memo((key: string) => {
         callCount++;
@@ -285,7 +285,7 @@ describe("memo", () => {
       assert.strictEqual(callCount, 1);
     });
 
-    test("should handle functions with side effects", () => {
+    it("should handle functions with side effects", () => {
       let sideEffectCount = 0;
       const fn = memo((x: number) => {
         sideEffectCount++;
@@ -298,7 +298,7 @@ describe("memo", () => {
       assert.strictEqual(sideEffectCount, 1);
     });
 
-    test("cache should persist across calls", () => {
+    it("cache should persist across calls", () => {
       const fn = memo((x: number) => ({ value: x }));
 
       const obj1 = fn(5);
