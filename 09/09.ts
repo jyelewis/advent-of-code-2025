@@ -41,6 +41,10 @@ export function day09(input: string) {
     .filter(({ tileA }) => tileA.x < 5000)
     // find the first rectangle fully contained within the polygon
     .find(({ tileA, tileB }) =>
+      // turf.booleanContains() has a bug for this shape!
+      // https://github.com/Turfjs/turf/issues/2318
+      // could use turf.difference(featurecollection) === null, which does work
+      // de9im is much faster though
       de9im.contains(
         fullPolygon,
         turf.polygon([
