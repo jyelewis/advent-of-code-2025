@@ -10,14 +10,14 @@ export function day09(input: string) {
   });
 
   // generate all possible rectangles from these red tiles as corners
-  const allInternalRects = [];
+  const allRects = [];
   for (let i = 0; i < redTiles.length; i++) {
     for (let j = i + 1; j < redTiles.length; j++) {
       const tileA = redTiles[i]!;
       const tileB = redTiles[j]!;
       const area = (Math.abs(tileA.x - tileB.x) + 1) * (Math.abs(tileA.y - tileB.y) + 1);
 
-      allInternalRects.push({
+      allRects.push({
         tileA,
         tileB,
         area,
@@ -26,15 +26,15 @@ export function day09(input: string) {
   }
 
   // sort by largest area
-  allInternalRects.sort((a, b) => b.area - a.area);
+  allRects.sort((a, b) => b.area - a.area);
 
   // part A: the largest possible rectangle from these corners
-  const largestRect = allInternalRects[0]!;
+  const largestRect = allRects[0]!;
 
   // part B: the largest rectangle fully contained within the polygon
   // connect all our red tiles into a polygon (also wrap the last to the first)
   const fullPolygon = turf.polygon([[...redTiles.map((t) => [t.x, t.y]), [redTiles[0]!.x, redTiles[0]!.y]]]);
-  const largestInternalRect = allInternalRects
+  const largestInternalRect = allRects
     // optimisation from visualising: we know the vertexes must be in the same half of the circle
     .filter(({ tileA, tileB }) => tileA.y < 50000 === tileB.y < 50000)
     // post solution optimisation
