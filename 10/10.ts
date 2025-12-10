@@ -6,7 +6,7 @@ interface Machine {
   indicatorLightsObjective: boolean[];
   currentIndicatorLights: boolean[];
   buttons: number[][];
-  joltage: number[];
+  targetJoltage: number[];
 }
 
 // idea: take the option that gets us closest to the correct solution
@@ -104,7 +104,7 @@ export function day10a(input: string) {
       indicatorLightsObjective: indicatorLightsStr.chars().map((c) => c === "#"),
       currentIndicatorLights: new Array(indicatorLightsStr.length).fill(false),
       buttons,
-      joltage: joltageStr.split(",").map((x: string) => x.toInt()),
+      targetJoltage: joltageStr.split(",").map((x: string) => x.toInt()),
     };
 
     return machine;
@@ -132,6 +132,172 @@ export function day10a(input: string) {
   return machines.map((machine) => buttonPressesForMachine2(machine)).sum();
 }
 
+// ----------------------------------------------------------------------
+
+// null means this machine cannot reach target!
+function calcJoltageDistance(currentJoltage: number[], targetJoltage: number[]): number | null {
+  assert(currentJoltage.length === targetJoltage.length, "currentJoltage and targetJoltage must be same length!");
+  let distance = 0;
+  for (let i = 0; i < currentJoltage.length; i++) {
+    if (currentJoltage[i] > targetJoltage[i]) {
+      return null;
+    }
+
+    distance += targetJoltage[i] - currentJoltage[i];
+  }
+
+  return distance;
+}
+
+function calcJoltageDistanceSquared(currentJoltage: number[], targetJoltage: number[]): number | null {
+  assert(currentJoltage.length === targetJoltage.length, "currentJoltage and targetJoltage must be same length!");
+  let distance = 0;
+  for (let i = 0; i < currentJoltage.length; i++) {
+    if (currentJoltage[i] > targetJoltage[i]) {
+      return null;
+    }
+
+    // TODO: is this the opposite of what we want?
+    distance += Math.pow(targetJoltage[i] - currentJoltage[i], 2);
+  }
+
+  return distance;
+}
+
+function applyJoltageForButton(currentJoltage: number[], button: number[]): number[] {
+  const newJoltage = [...currentJoltage];
+  for (const wire of button) {
+    newJoltage[wire] += 1;
+  }
+  return newJoltage;
+}
+
+function buttonPressesForMachinePartB(index: number, machine: Machine): number {
+  let closestJoltage = Infinity;
+  console.log("Checking machine", machine);
+  const joltagePositions: Array<{
+    currentJoltage: number[];
+    joltageDistance: number; // distance to solution
+    numButtonsPressed: number; // distance from start
+  }> = [
+    {
+      currentJoltage: new Array(machine.targetJoltage.length).fill(0),
+      joltageDistance: Infinity,
+      numButtonsPressed: 0,
+    },
+  ];
+
+  // TODO: I think we need to keep seen items
+  const seenJoltages = new Set<string>();
+
+  let iterations = 0;
+  while (true) {
+    // sort by num buttons pressed (lowest first) then by num incorrect (lowest first)
+    joltagePositions.sort((a, b) => {
+      // TODO: omg a+
+      // TODO: sort by whatever will get us closest!
+      //       isn't that kinda what we're already doing?
+      // if (a.numButtonsPressed === b.numButtonsPressed) {
+      //   return a.joltageDistance - b.joltageDistance;
+      // }
+      //
+      // return a.numButtonsPressed - b.numButtonsPressed;
+      if (a.joltageDistance === b.joltageDistance) {
+        return a.numButtonsPressed - b.numButtonsPressed;
+      }
+
+      return a.joltageDistance - b.joltageDistance;
+      // const aF = a.joltageDistance + a.numButtonsPressed;
+      // const bF = b.joltageDistance + b.numButtonsPressed;
+      // return aF - bF;
+    });
+
+    const fromPosition = joltagePositions.shift();
+    // console.log(
+    //   fromPosition?.numButtonsPressed,
+    //   fromPosition?.currentJoltage.join(",") ?? "null",
+    //   fromPosition?.joltageDistance ?? "null",
+    //   joltagePositions.length,
+    // );
+    // TODO: sus: why isn't it possible to always lower this? we should be able to sneek forwards at all times
+    if (fromPosition?.joltageDistance < closestJoltage) {
+      closestJoltage = fromPosition?.joltageDistance ?? Infinity;
+    }
+    if (iterations % 100_000 === 0) {
+      console.log(
+        `Machine: ${index} - Buttons: ${fromPosition?.numButtonsPressed} - Distance: ${fromPosition?.joltageDistance} - Paths: ${joltagePositions.length} - Closest: ${closestJoltage}`,
+      );
+    }
+    iterations++;
+
+    assert(fromPosition !== undefined);
+
+    // evaluate pressing each button FROM each position
+    for (const button of machine.buttons) {
+      // each button gives us one new position
+      const newJoltage = applyJoltageForButton(fromPosition.currentJoltage, button);
+      const newJoltageDistance = calcJoltageDistance(newJoltage, machine.targetJoltage);
+
+      if (newJoltageDistance === null) {
+        // console.log(`Went over from ${fromPosition?.joltageDistance}`, {
+        //   prevJoltage: fromPosition.currentJoltage,
+        //   newJoltage,
+        //   prevJoltageDistance: fromPosition.joltageDistance,
+        //   newJoltageDistance,
+        //   targetJoltage: machine.targetJoltage,
+        // });
+        continue;
+      }
+
+      if (newJoltageDistance === 0) {
+        console.log("found solution!", fromPosition.numButtonsPressed + 1);
+        return fromPosition.numButtonsPressed + 1;
+      }
+
+      // TODO: use something other than a set
+      const lightsKey = newJoltage.map((x) => x.toString()).join(",");
+      if (seenJoltages.has(lightsKey)) {
+        continue;
+      }
+      seenJoltages.add(lightsKey);
+
+      joltagePositions.push({
+        currentJoltage: newJoltage,
+        joltageDistance: newJoltageDistance,
+        numButtonsPressed: fromPosition.numButtonsPressed + 1,
+      });
+    }
+  }
+}
+
 export function day10b(input: string) {
+  const machines = input.lines().map((line) => {
+    const parts = line.split(" ");
+
+    const [indicatorLightsStr] = sscanf`[${String}]`(parts[0]);
+    const [joltageStr] = sscanf`{${String}}`(parts[parts.length - 1]);
+    const buttonStrs = parts.slice(1, parts.length - 1);
+    const buttons = buttonStrs.map((buttonStr) => {
+      const [asdf] = sscanf`(${String})`(buttonStr);
+      return asdf.split(",").map((x: string) => x.toInt());
+    });
+
+    const machine: Machine = {
+      indicatorLightsObjective: indicatorLightsStr.chars().map((c) => c === "#"),
+      currentIndicatorLights: new Array(indicatorLightsStr.length).fill(false),
+      buttons,
+      targetJoltage: joltageStr.split(",").map((x: string) => x.toInt()),
+    };
+
+    return machine;
+  });
+
+  // buttonPressesForMachinePartB(0, machines[0]);
+  buttonPressesForMachinePartB(1, machines[1]);
+  buttonPressesForMachinePartB(2, machines[2]);
+  buttonPressesForMachinePartB(3, machines[3]);
+  buttonPressesForMachinePartB(4, machines[4]);
+
   return 123;
+  // return machines.map((machine, index) => buttonPressesForMachinePartB(index, machine)).sum();
 }
