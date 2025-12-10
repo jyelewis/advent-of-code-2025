@@ -24,6 +24,6 @@ describe("day10", () => {
 
   it("10b input", () => {
     const answer = day10b(input);
-    assert.equal(answer, 123);
+    assert.equal(answer, 17970);
   });
 });
