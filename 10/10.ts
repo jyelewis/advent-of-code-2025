@@ -10,28 +10,28 @@ interface Machine {
 
 function parseInput(input: string): Machine[] {
   return input.lines().map((line) => {
+    // [.##.] (1,3) (1) (0,3) (0,1,3) (1,2,3) (3) {23,40,20,64}
     const parts = line.split(" ");
 
-    const [indicatorLightsStr] = sscanf`[${String}]`(parts[0]);
-    const [joltageStr] = sscanf`{${String}}`(parts[parts.length - 1]);
-    const buttonStrs = parts.slice(1, parts.length - 1);
-    const buttons = buttonStrs.map((buttonStr) => {
-      const [buttonWires] = sscanf`(${String})`(buttonStr);
-      return buttonWires.split(",").map((x: string) => x.toInt());
-    });
-
+    // it is what it is
     return {
-      indicatorLightsObjective: indicatorLightsStr.chars().map((c: any) => c === "#"),
-      buttons,
-      targetJoltage: joltageStr.split(",").map((x: string) => x.toInt()),
+      indicatorLightsObjective: sscanf`[${String}]`(parts[0])[0]
+        .chars()
+        .map((c: any) => c === "#"),
+      buttons: parts.slice(1, parts.length - 1).map((buttonStr) =>
+        sscanf`(${String})`(buttonStr)[0]
+          .split(",")
+          .map((x: string) => x.toInt()),
+      ),
+      targetJoltage: sscanf`{${String}}`(parts[parts.length - 1])[0]
+        .split(",")
+        .map((x: string) => x.toInt()),
     };
   });
 }
 
 export function day10a(input: string) {
-  const machines = parseInput(input);
-
-  return machines
+  return parseInput(input)
     .map((machine) => {
       const lightPositions: Array<{
         currentIndicatorLights: boolean[];
@@ -45,6 +45,7 @@ export function day10a(input: string) {
 
       const seenLights = new Set<string>();
 
+      // BFS with duplicate state detection
       while (true) {
         const fromPosition = lightPositions.shift();
         assert(fromPosition !== undefined);
@@ -52,25 +53,25 @@ export function day10a(input: string) {
         // evaluate pressing each button FROM each position
         for (const button of machine.buttons) {
           // press button and compute new indicator lights state
-          const newIndicatorLights = [...fromPosition.currentIndicatorLights];
+          const currentIndicatorLights = [...fromPosition.currentIndicatorLights];
           for (const light of button) {
-            newIndicatorLights[light] = !fromPosition.currentIndicatorLights[light];
+            currentIndicatorLights[light] = !fromPosition.currentIndicatorLights[light];
           }
 
           // check if we've solved it
-          if (newIndicatorLights.every((light, i) => light === machine.indicatorLightsObjective[i])) {
+          if (currentIndicatorLights.every((light, i) => light === machine.indicatorLightsObjective[i])) {
             return fromPosition?.numButtonsPressed + 1;
           }
 
           // avoid using more presses to land on this path again
-          const lightsKey = newIndicatorLights.map((x) => (x ? "1" : "0")).join(",");
+          const lightsKey = currentIndicatorLights.join(",");
           if (seenLights.has(lightsKey)) {
             continue;
           }
           seenLights.add(lightsKey);
 
           lightPositions.push({
-            currentIndicatorLights: newIndicatorLights,
+            currentIndicatorLights,
             numButtonsPressed: fromPosition.numButtonsPressed + 1,
           });
         }
@@ -80,8 +81,7 @@ export function day10a(input: string) {
 }
 
 export function day10b(input: string) {
-  const machines = parseInput(input);
-  return machines
+  return parseInput(input)
     .map((machine) => {
       const integers: string[] = ["presses"];
       const constraints: any = {};
@@ -100,16 +100,17 @@ export function day10b(input: string) {
         variables[`button${buttonIndex}`] = va;
         integers.push(`button${buttonIndex}`);
       }
-      // ------
-      const machineSolution = solve({
+
+      const solution = solve({
         direction: "minimize" as const,
         objective: "presses",
         constraints,
         variables,
         integers,
       });
+      assert(solution.status === "optimal");
 
-      return machineSolution.result;
+      return solution.result;
     })
     .sum();
 }
