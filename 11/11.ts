@@ -1,56 +1,32 @@
 import { memo } from "../utilities";
 
-export function day11a(input: string) {
-  const nodes = input.lines().map((line) => {
-    const [nodeId, outputsStr] = line.split(":");
-
-    return {
+export function day11(input: string) {
+  const nodes = input
+    .lines()
+    .map((line) => line.split(":"))
+    .map(([nodeId, outputsStr]) => ({
       nodeId,
-      outputs: outputsStr.split(" ").filter((x) => x !== ""),
-    };
-  });
+      outputs: outputsStr.trim().split(" "),
+    }));
 
-  const countPathsFromNode = memo((nodeId: string): number => {
+  const countPathsFromNode = memo((nodeId: string, requiredNodes: string[] = []): number => {
     if (nodeId === "out") {
-      return 1;
+      // this is a valid path! (if we have no required nodes that have not been hit yet)
+      return requiredNodes.length === 0 ? 1 : 0;
     }
 
-    const node = nodes.findOne((x) => x.nodeId === nodeId);
-    return node.outputs.map((outputNodeId) => countPathsFromNode(outputNodeId)).sum();
+    // as we pass required nodes, remove them from out pending list
+    requiredNodes = requiredNodes.filter((x) => x !== nodeId);
+
+    // recursive DFS
+    return nodes
+      .findOne((node) => node.nodeId === nodeId)
+      .outputs.map((outputNodeId) => countPathsFromNode(outputNodeId, requiredNodes))
+      .sum();
   });
 
-  return countPathsFromNode("you");
-}
-
-export function day11b(input: string) {
-  const nodes = input.lines().map((line) => {
-    const [nodeId, outputsStr] = line.split(":");
-
-    return {
-      nodeId,
-      outputs: outputsStr.split(" ").filter((x) => x !== ""),
-    };
-  });
-
-  const countPathsFromNode = memo((nodeId: string, hasVisitedDac: boolean, hasVisitedFft: boolean): number => {
-    if (nodeId === "out") {
-      if (hasVisitedDac && hasVisitedFft) {
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-
-    if (nodeId === "dac") {
-      hasVisitedDac = true;
-    }
-    if (nodeId === "fft") {
-      hasVisitedFft = true;
-    }
-
-    const node = nodes.findOne((x) => x.nodeId === nodeId);
-    return node.outputs.map((outputNodeId) => countPathsFromNode(outputNodeId, hasVisitedDac, hasVisitedFft)).sum();
-  });
-
-  return countPathsFromNode("svr", false, false);
+  return {
+    partA: countPathsFromNode("you"),
+    partB: countPathsFromNode("svr", ["dac", "fft"]),
+  };
 }
