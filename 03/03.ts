@@ -1,6 +1,6 @@
 import { range } from "../utilities";
 
-export function largestJoltageForBank(bank: number[], numDigits: number) {
+function largestJoltageForBank(bank: number[], numDigits: number) {
   const digits = [];
   for (const digitsRemaining of range(numDigits - 1, 0, -1)) {
     // calculate the options for the largest digit we can pick, we need to leave enough digits for the remaining places
