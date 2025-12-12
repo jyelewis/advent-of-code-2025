@@ -5,7 +5,7 @@ import fs from "fs";
 if (isMainThread) {
   // Main thread: create workers for each challenge
   async function main() {
-    const numChallenges = 10;
+    const numChallenges = 11;
     const days = range(1, numChallenges);
 
     console.time("All");

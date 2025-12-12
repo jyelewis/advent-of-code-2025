@@ -12,7 +12,6 @@
     "test": "tsx --test **/*.test.ts",
     "test:coverage": "tsx --test --experimental-test-coverage **/*.test.ts",
     "speed": "yarn tsc && node dist/speedTest.js",
-    "tsc": "tsc --noEmit",
     "lint:check": "prettier --check .",
     "lint:fix": "prettier --write .",
     "check": "yarn tsc && yarn lint:check && yarn test"
