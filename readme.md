@@ -1,4 +1,4 @@
-![Advent of Code](https://community.alteryx.com/t5/image/serverpage/image-id/269381iE1288FAEB30E4EDA?v=v2)
+![Advent of Code](https://repository-images.githubusercontent.com/112706767/160be980-3b1a-11eb-9dbe-439a40adfa99)
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23000000.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
 [![Tests](https://github.com/jyelewis/advent-of-code-2025/actions/workflows/tests.yaml/badge.svg)](https://github.com/jyelewis/advent-of-code-2025/actions/workflows/tests.yaml)
