@@ -72,10 +72,10 @@ export class Direction {
   static LEFT = new Direction(-1, 0);
   static RIGHT = new Direction(1, 0);
 
-  static NORTH = new Direction(0, -1);
-  static SOUTH = new Direction(0, 1);
-  static WEST = new Direction(-1, 0);
-  static EAST = new Direction(1, 0);
+  static NORTH = this.UP;
+  static SOUTH = this.DOWN;
+  static WEST = this.LEFT;
+  static EAST = this.RIGHT;
 
   static UP_LEFT = new Direction(-1, -1);
   static UP_RIGHT = new Direction(1, -1);
