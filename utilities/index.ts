@@ -12,3 +12,6 @@ export { memo } from "./memo";
 export { Position } from "./Position";
 export { Direction } from "./Direction";
 export { GridPosition, Grid } from "./Grid";
+
+// math
+export { gcd, lcm } from "./euclideanMultiples";
