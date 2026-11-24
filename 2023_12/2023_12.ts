@@ -56,10 +56,10 @@ export function day2023_12a(input: string) {
     return count;
   });
 
-  for (const cr of conditionReports) {
-    const count = countSolutionsToCR(cr.path, cr.plan);
-    console.log(`${cr.path} ${cr.plan.join(",")}: ${count}`);
-  }
+  // for (const cr of conditionReports) {
+  //   const count = countSolutionsToCR(cr.path, cr.plan);
+  //   console.log(`${cr.path} ${cr.plan.join(",")}: ${count}`);
+  // }
 
   return conditionReports.map((cr) => countSolutionsToCR(cr.path, cr.plan)).sum();
 }
@@ -117,10 +117,10 @@ export function day2023_12b(input: string) {
     return count;
   });
 
-  for (const cr of conditionReports) {
-    const count = countSolutionsToCR(cr.path, cr.plan);
-    console.log(`${cr.path} ${cr.plan.join(",")}: ${count}`);
-  }
+  // for (const cr of conditionReports) {
+  //   const count = countSolutionsToCR(cr.path, cr.plan);
+  //   console.log(`${cr.path} ${cr.plan.join(",")}: ${count}`);
+  // }
 
   return conditionReports.map((cr) => countSolutionsToCR(cr.path, cr.plan)).sum();
 }
