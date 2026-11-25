@@ -13,16 +13,12 @@ describe("day2023_12", () => {
   });
 
   it("2023_12a input", () => {
-    console.time("12a");
     const answer = day2023_12a(input);
-    console.timeEnd("12a");
     assert.equal(answer, 7718);
   });
 
   it("2023_12b sample input", () => {
-    console.time("aaaa");
     const answer = day2023_12b(sampleInput);
-    console.timeEnd("aaaa");
     assert.equal(answer, 525152);
   });
 
