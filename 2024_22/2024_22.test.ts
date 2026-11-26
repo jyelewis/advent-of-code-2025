@@ -24,9 +24,7 @@ describe("day2024_22", () => {
   });
 
   it("2024_22b input", () => {
-    console.time("aaaa");
     const answer = day2024_22b(input);
-    console.timeEnd("aaaa");
     assert.equal(answer, 2089);
   });
 

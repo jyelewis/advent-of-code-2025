@@ -12,11 +12,8 @@ describe("day2023_17", () => {
     assert.equal(answer, 102);
   });
 
-  it.skip("2023_17a input", () => {
-    console.time("2023_17a input");
-    // sitting around 3s
+  it("2023_17a input", () => {
     const answer = day2023_17a(input);
-    console.timeEnd("2023_17a input");
     assert.equal(answer, 870);
   });
 
@@ -25,11 +22,8 @@ describe("day2023_17", () => {
     assert.equal(answer, 94);
   });
 
-  it.skip("2023_17b input", () => {
-    // 2m 14s
-    console.time("2023_17b input");
+  it("2023_17b input", () => {
     const answer = day2023_17b(input);
-    console.timeEnd("2023_17b input");
 
     assert.equal(answer, 1063);
   });

@@ -39,6 +39,24 @@ describe("Direction", () => {
     });
   });
 
+  describe("rotate180", () => {
+    it("should rotate UP to DOWN", () => {
+      assert.deepStrictEqual(Direction.UP.rotate180(), Direction.DOWN);
+    });
+    it("should rotate LEFT to RIGHT", () => {
+      assert.deepStrictEqual(Direction.LEFT.rotate180(), Direction.RIGHT);
+    });
+    it("should rotate DOWN to UP", () => {
+      assert.deepStrictEqual(Direction.DOWN.rotate180(), Direction.UP);
+    });
+    it("should rotate RIGHT to LEFT", () => {
+      assert.deepStrictEqual(Direction.RIGHT.rotate180(), Direction.LEFT);
+    });
+    it("should throw for non-cardinal directions", () => {
+      assert.throws(() => Direction.UP_LEFT.rotate180(), /Cannot rotate non-cardinal direction/);
+    });
+  });
+
   describe("Constants", () => {
     it("Cardinals", () => {
       assert.notEqual(Direction.UP, undefined);

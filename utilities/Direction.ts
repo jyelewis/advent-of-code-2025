@@ -20,8 +20,6 @@ export class Direction {
     throw new Error(`Cannot rotate non-cardinal direction ${this.toString()}`);
   }
 
-  // TODO: test me
-  // TODO: port to 2026
   rotate180() {
     if (this.equals(Direction.UP)) return Direction.DOWN;
     if (this.equals(Direction.RIGHT)) return Direction.LEFT;
