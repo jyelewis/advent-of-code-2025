@@ -36,5 +36,6 @@ describe("Euclidean Multiples", () => {
     assert.equal(lcm([30, 45, 255]), 1530);
     assert.equal(lcm([10, 11]), 110);
     assert.equal(lcm([10, 11, 5]), 110);
+    assert.equal(lcm([3793, 3947, 4003, 4019]), 240853834793347);
   });
 });
